@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% block login_bar %}
+{% endblock %}
+
+{% block heading_inner %}
+    <div class="jumbotron">
+        <div class="container">
+            <h1>Please login</h1>
+            <div class="login-form-holder">
+                <form action="{% url 'login' %}" method="POST">
+                    {% csrf_token %}
+                    {% if message %}
+                        <div>
+                            <span class="label label-default">{{ message }}</span>
+                        </div>
+                    {% endif %}
+                    <div class="form-group">
+                        <input name="username" type="text" placeholder="Username" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <input name="password" type="password" placeholder="Password" class="form-control">
+                    </div>
+                    <button type="submit" class="btn btn-success">Sign in</button>
+                </form>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block main_content_outer %}
+{% endblock %}
