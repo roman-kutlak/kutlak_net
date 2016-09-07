@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+
+
+{% block content %}
+<div class="jumbotron">
+  <div class="container">
+    <h2>Available Templates</h2>
+
+    <ul id="templates">
+      {% for t in object_list %}
+        <li><a href="{% url 'snappy.templates-detail' pk=t.id %}">{{ t.signature }}</a></li>
+      {% empty %}
+        <li>No templates available.</li>
+      {% endfor %}
+    </ul>
+  </div>
+</div>
+{% endblock %}

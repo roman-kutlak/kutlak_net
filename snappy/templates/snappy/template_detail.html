@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+
+
+{% block content %}
+<div class="jumbotron">
+  <div class="container">
+    <h2>Template :: {{ object.signature }}</h2>
+    <h4><a href="{% url 'snappy.templates-list' %}">« back to list</a></h4>
+    <div id="template-container">
+      <p class="template-name">name: <span>{{ object.name }}</span></p>
+      <p class="template-name"># params: <span>{{ object.num_params }}</span></p>
+      <p class="template-name">description: <span>{{ object.description }}</span></p>
+      <p class="template-name">content: <span>{{ object.content }}</span></p>
+    </div>
+  </div>
+</div>
+{% endblock %}

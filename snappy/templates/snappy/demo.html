@@ -1,0 +1,116 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+
+{% block stylesheets %}
+    <link href="{% static 'snappy/css/snappy.css' %}" rel="stylesheet"/>
+{% endblock %}
+
+{% block content %}
+    <div class="jumbotron">
+
+        <!-- instructions -->
+        <div class="container">
+            <h1>Snappy::Demo</h1>
+            <div class="col-md-12">
+                <p>First, enter a valid FOL formula. Then click the "Translate" button and watch the magic happen...</p>
+            </div>
+            <div style="clear: both;"></div>
+            <div id="messages">
+            </div>
+        </div>
+
+        <div class="container">
+            <div class="col-md-12">
+                <form id="translation-form" action="#">
+                    {% csrf_token %}
+                    <textarea id="formula" name="formula" class="formula-area form-control" rows="2"
+                              placeholder="Enter a FOL formula"></textarea>
+                </form>
+                <div id="num-applied-simplifications-info" class="well well-sm">
+                    <span id="num-applied-simplifications" class="text-muted">No simplifications applied</span>
+                    <button id="toggle-simplifications" href="#" class="btn btn-info btn-sm"
+                            style="float: right; width: 150px;">
+                        Show Simplifications <span class="glyphicon glyphicon-menu-down"></span>
+                    </button>
+                    <div style="clear: both;"></div>
+                </div>
+            </div>
+        </div>
+
+        <div id="simplifications" class="container">
+            <div class="row">
+                <div class="col-md-12">
+                    <p class="simplifications-intro">
+                        Before a formula gets translated, it can be simplified.
+                        There are various kinds of simplifications.
+                        Some are based on the syntax of the formula whereas others are based
+                        on the semantics of the formula. The order in which the simplifications
+                        are applied also affects the final formula. Try some simplifications
+                        and see what happens.
+                    </p>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-7">
+                    <div id="simplifications-div" class="simplifications-div panel panel-default">
+                        <div class="panel-heading">Available Simplifications</div>
+                        <div class="panel-body">
+                            <ul class="simplification-list">
+                                {% for s in simplifications %}
+                                    <li class="simplification-list-item">
+                                        <div>
+                                            <button class="btn btn-success btn-sm add-simplification-btn simplification-btn"
+                                                    data-simplification-name="{{ s.pretty }}">
+                                                Add <span class="glyphicon glyphicon-plus-sign"></span>
+                                            </button>
+                                            <div class="simplification-div with-help-popup" data-toggle="popover"
+                                                 title="Help" data-placement="top"
+                                                 data-content="{{ s.doc }}">
+                                                <span>{{ s.pretty }}</span>
+                                            </div>
+                                        </div>
+                                    </li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    </div>
+                </div> <!-- left hand sid - available simplifications -->
+
+                <div class="col-md-5">
+                    <div id="applied-simplifications" class="simplifications-div panel panel-default">
+                        <div class="panel-heading">Applied Simplifications</div>
+                        <div class="panel-body">
+                            <ul id="applied-simplification-list" class="simplification-list"
+                                data-max-simplification-id="0">
+                                <!-- add simplifications through JS -->
+                            </ul>
+                        </div>
+                    </div>
+                </div> <!-- applied simplifications -->
+            </div> <!-- row -->
+        </div> <!-- container with simplifications -->
+
+        <div class="container">
+
+            <div class="col-md-4 col-sm-offset-4">
+                <button id="translate-button" class="btn btn-lg btn-primary btn-block" type="submit">Translate</button>
+            </div>
+
+        </div>
+
+        <div class="container">
+            <div class="col-md-12">
+                <div id="translation-container" class="translation-container default-border">
+                    <textarea id="translation" style="disabled: disabled;" class="formula-area form-control" rows="4"
+                              placeholder="Click 'Translate'" readonly></textarea>
+                </div>
+            </div>
+        </div>
+
+    </div>
+{% endblock %}
+
+{% block scripts %}
+    <script src="{% static 'snappy/js/snappy.js' %}"></script>
+{% endblock %}

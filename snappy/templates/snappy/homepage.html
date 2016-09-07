@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="jumbotron">
+  <div class="container">
+    <h1>Snappy</h1>
+    <p>Snappy is a tool for learning Forst Order Logic (FOL). It can translate
+      FOL formulas into a text in English. This is done by mapping predicates
+      to partially lexicalised syntactic trees. These trees are then processed
+      by a python Natural Language Generation library
+      <a href="https://github.com/roman-kutlak/nlglib">nlglib</a>.
+    </p>
+    <p><a class="btn btn-primary btn-lg" href="{% url 'snappy.demo' %}" role="button">Try it &raquo;</a></p>
+  </div>
+</div>
+{% endblock %}

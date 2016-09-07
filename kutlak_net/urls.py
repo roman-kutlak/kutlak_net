@@ -16,7 +16,14 @@ Including another URLconf
 from django.conf.urls import url, include
 from django.contrib import admin
 
+from . import views
+
+
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
-    url(r'^', include('notes.urls')),
+    url(r'^login/$', views.do_login, name='login'),
+    url(r'^logout/$', views.do_logout, name='logout'),
+    url(r'^$', views.welcome, name='homepage'),
+    url(r'^notes/', include('notes.urls')),
+    url(r'^snappy/', include('snappy.urls')),
 ]
