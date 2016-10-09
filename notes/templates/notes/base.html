@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+
+{% block heading_outer %}
+    <div class="jumbotron">
+        <div class="container">
+            <h1>Notepad</h1>
+            <p>Just like a blog, but less frequent/topical. Here are some notes:</p>
+        </div>
+    </div>
+{% endblock %}
+
+{% block main_content_inner %}
+    <div class="row">
+        {% for note in notes %}
+            <div class="col-md-{{ width }}">
+                <div class="note-list-display">
+                    <h3 class="note-list-title">{{ note.title }}</h3>
+                    <div class="note-list-body">
+                        {{ note.body|safe }}
+                    </div>
+                    <div class="note-list-footer">
+                        Tags:
+                        <ul class="nav nav-pills" role="tablist">
+                            {% for t in note.tags.all %}
+                                <li role="presentation"><a href="{% url 'notes.tagged' tag=t.name %}"><span
+                                        class="badge">{{ t.name }}</span></a></li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        {% empty %}
+        {% endfor %}
+    </div>
+{% endblock %}

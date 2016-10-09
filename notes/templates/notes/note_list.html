@@ -1,0 +1,31 @@
+{% extends 'notes/base.html' %}
+
+{% block main_content_inner %}
+    {% for note in object_list %}
+        <div class="row">
+            <div class="col-md-12">
+                <div class="note-list-display">
+                    <h3 class="note-list-title">{{ note.title }}</h3>
+                    <div class="note-list-body">
+                        {{ note.body|safe }}
+                    </div>
+                    <div class="note-list-footer">
+                        Tags:
+                        <ul class="nav nav-pills" role="tablist">
+                            {% for t in note.tags.all %}
+                                <li role="presentation"><a href="{% url 'notes.tagged' tag=t.name %}"><span
+                                        class="badge">{{ t.name }}</span></a></li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% empty %}
+        <div class="row">
+            <div class="col-md-12">
+                <h4>Nothing here, I am afraid.</h4>
+            </div>
+        </div>
+    {% endfor %}
+{% endblock %}
