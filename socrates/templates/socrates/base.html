@@ -1,0 +1,29 @@
+{% extends 'base.html' %}
+
+{% block heading_outer %}
+    <div class="jumbotron">
+        <div class="container">
+            <h1>Socrates</h1>
+            <p>Socrates is an online demo of my
+                <a href="https://github.com/roman-kutlak/argulib">library for formal argumentation</a>.
+                Argumentation is a form of reasoning using logic and a higher level "semantic" layer which describes
+                what arguments are accepted/rejected within the given semantic. Arguments are created from
+                logical rules and the relations within a set of the rules.
+            </p>
+            <p>This all sounds a bit more complicated then it is. Essentially, you start with a knowledge base
+                containing information about your domain. This information is encoded in some kind of logic.
+                In our case, the logic is simplified to literals (these can represent a statement such as "it is wet")
+                and two kinds of rules: strict and defeasible. A stric rule is something that is always true.
+                For example, mammals are animals (m --> a). Defeasible rules are things that are usually true.
+                For example, birds can fly (b ==> f). This is usually true, except for, for example, penguins.
+            </p>
+            <p>Argumentation differs from other logical reasoning systems in being able to cope with conflicting
+                rules. This is sometimes called non-monotonic logic. Unlike, for example, ontologies where you have to
+                maintain consistency, argumentation allows you to have rules with conflicting conclusion.
+                The resolution of what is an "accepted" conclusion is based on higher level semantics
+                and potentially individual preferences.
+            </p>
+            <p><a class="btn btn-primary btn-lg" href="{% url 'socrates.demo' %}" role="button">Try it &raquo;</a></p>
+        </div>
+    </div>
+{% endblock %}

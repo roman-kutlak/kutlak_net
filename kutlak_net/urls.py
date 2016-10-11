@@ -26,4 +26,5 @@ urlpatterns = [
     url(r'^$', views.welcome, name='homepage'),
     url(r'^notes/', include('notes.urls')),
     url(r'^snappy/', include('snappy.urls')),
+    url(r'^socrates/', include('socrates.urls')),
 ]

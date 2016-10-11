@@ -22,8 +22,8 @@
                         Tags:
                         <ul class="nav nav-pills" role="tablist">
                             {% for t in note.tags.all %}
-                                <li role="presentation"><a href="{% url 'notes.tagged' tag=t.name %}"><span
-                                        class="badge">{{ t.name }}</span></a></li>
+                                <li role="presentation"><a href="{% url 'notes.tagged' tag=t.name %}">
+                                    <span class="badge">{{ t.name }}</span></a></li>
                             {% endfor %}
                         </ul>
                     </div>
