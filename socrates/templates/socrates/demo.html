@@ -16,13 +16,22 @@
 
 {% block main_content_inner %}
     <div class="row">
-    <a id="reload-btn" class="btn btn-primary btn-large">Reload graph</a>
+    <div id="cy" class="col-md-9"></div>
+    <div id="graph-controls" class="col-md-3">
+        <a id="reload-btn" class="btn btn-primary btn-large btn-graph-control">Reload graph</a>
+        <a id="fit-btn" class="btn btn-primary btn-large btn-graph-control">Fit graph</a>
+        <a id="autolayout-btn" class="btn btn-primary btn-large btn-graph-control">Auto-layout</a>
+    </div>
     </div>
     <div class="row">
-    <div id="cy"></div>
+    <form id="command-form" method="POST" action="{% url 'socrates.command' %}">
+        {% csrf_token %}
+        <label for="command">Command</label>
+        <input id="command" type="text" name="command" placeholder="Command..."/>
+        <input id="submit-command-btn" type="button" name="submit" value="Submit" formaction=""/>
+    </form>
     </div>
 {% endblock %}
-
 
 {% block scripts %}
     <script src="{% static 'socrates/js/socrates.js' %}"></script>

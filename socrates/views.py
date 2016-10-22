@@ -25,7 +25,17 @@ class JSONResponseMixin(object):
 class Graph(JSONResponseMixin, TemplateView):
 
     def get_data(self, context):
-        context.update({'nodes': [{'id': 'a', 'name': 'a'},
+        context.update({'nodes': [],
+                        'edges': []})
+        context.pop('view')
+        return context
+
+    def render_to_response(self, context, **response_kwargs):
+        return self.render_to_json_response(context, **response_kwargs)
+
+
+def process_command(request):
+    return JsonResponse({'nodes': [{'id': 'a', 'name': 'a'},
                                   {'id': 'b', 'name': 'b'},
                                   {'id': 'c', 'name': 'c'},
                                   {'id': 'j', 'name': 'j'}],
@@ -33,8 +43,3 @@ class Graph(JSONResponseMixin, TemplateView):
                                   {'id': 'ac', 'source': 'a', 'target': 'c'},
                                   {'id': 'bc', 'source': 'b', 'target': 'c'},
                                   {'id': 'cj', 'source': 'c', 'target': 'j'}]})
-        context.pop('view')
-        return context
-
-    def render_to_response(self, context, **response_kwargs):
-        return self.render_to_json_response(context, **response_kwargs)

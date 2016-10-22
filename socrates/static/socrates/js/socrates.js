@@ -7,6 +7,90 @@
 
 var cy;
 
+
+function submitCommand(event) {
+  event.preventDefault();
+
+  var $form = $('#command-form');
+  var url = $form.attr('action');
+
+  $.post(url, $form.serialize())
+    .done(function (data) {
+      reloadGraph(data);
+    });
+}
+
+function reloadGraph(data) {
+  console.log(data);
+  var nodes = data['nodes'];
+  var edges = data['edges'];
+  var processed = [];
+  var existingNodes = cy.elements('node');
+  for (var i = 0; i < nodes.length; ++i) {
+    var node = nodes[i];
+    if (!existingNodes.filter('#' + node.id).length) {
+      console.log('adding node: ' + node);
+      cy.add({group: 'nodes', data: node});
+      processed.push(node.id);
+    } else {
+      console.log('node present');
+      processed.push(node.id);
+    }
+  }
+
+  for (i = 0; i < existingNodes.length; ++i) {
+    if (processed.indexOf(existingNodes[i].id()) < 0) {
+      existingNodes[i].remove();
+    }
+  }
+
+  for (var j = 0; j < edges.length; ++j) {
+    var edge = edges[j];
+    if (!cy.$('edge#' + edge.id).length) {
+      console.log('adding edge ' + edge);
+      cy.add({group: 'edges', data: edge});
+    } else {
+      console.log('edge already present: ' + edge)
+    }
+  }
+
+  cy.animate({
+    fit: {
+      padding: 20
+    }
+  }, {
+    duration: 1000
+  });
+}
+
+$('#reload-btn').on('click', function () {
+  $.ajax({
+    'url': '/socrates/graph/',
+    'context': cy
+  }).done(function (data) {
+    reloadGraph(data);
+  }).error(function (request, textStatus, error) {
+    console.log(textStatus);
+  });
+});
+
+$('#fit-btn').on('click', function () {
+  cy.animate({
+    fit: {
+      padding: 20
+    }
+  }, {
+    duration: 1000
+  });
+});
+
+$('#command-form').submit(function (event) {
+  submitCommand(event);
+});
+$('#submit-command-btn').click(function (event) {
+  submitCommand(event);
+});
+
 document.addEventListener('DOMContentLoaded', function () { // on dom ready
 
   cy = cytoscape({
@@ -86,57 +170,5 @@ document.addEventListener('DOMContentLoaded', function () { // on dom ready
       cy.elements().removeClass('faded');
     }
   });
-
-  $('#reload-btn').on('click', function () {
-    $.ajax({
-      'url': '/socrates/graph/',
-      'context': cy
-    }).done(function (data) {
-      console.log(data);
-      var nodes = data['nodes'];
-      var edges = data['edges'];
-      var processed = [];
-      var existing_nodes = cy.elements('node');
-      for (var i = 0; i < nodes.length; ++i) {
-        var node = nodes[i];
-        if (!existing_nodes.filter('#' + node.id).length) {
-          console.log('adding node: ' + node);
-          cy.add({group: 'nodes', data: node});
-          processed.push(node.id);
-        } else {
-          console.log('node present');
-          processed.push(node.id);
-        }
-      }
-
-      for (i = 0; i < existing_nodes.length; ++i) {
-        if (processed.indexOf(existing_nodes[i].id()) < 0) {
-          existing_nodes[i].remove();
-        }
-      }
-
-      for (var j = 0; j < edges.length; ++j) {
-        var edge = edges[j];
-        if (!cy.$('edge#' + edge.id).length) {
-          console.log('adding edge ' + edge);
-          cy.add({group: 'edges', data: edge});
-        } else {
-          console.log('edge already present: ' + edge)
-        }
-      }
-
-      cy.animate({
-        fit: {
-          padding: 20
-        }
-      }, {
-        duration: 1000
-      });
-
-    }).error(function (request, textStatus, error) {
-      console.log(textStatus);
-    });
-  });
-
 
 }); // on dom ready
