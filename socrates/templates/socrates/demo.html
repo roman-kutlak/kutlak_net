@@ -3,6 +3,14 @@
 
 {% block stylesheets %}
     <link href="{% static 'socrates/css/socrates.css' %}" rel="stylesheet"/>
+    <link href="{% static 'css/jquery.qtip.css' %}" rel="stylesheet"/>
+
+    <script src="{% static 'js/jquery.qtip.js' %}"></script>
+    <script src="{% static 'js/cola.v3.min.js' %}"></script>
+
+    <script src="{% static 'js/cytoscape.js' %}"></script>
+    <script src="{% static 'js/cytoscape-qtip.js' %}"></script>
+    <script src="{% static 'js/cytoscape-cola.js' %}"></script>
 {% endblock %}
 
 {% block heading_outer %}
@@ -16,20 +24,25 @@
 
 {% block main_content_inner %}
     <div class="row">
-    <div id="cy" class="col-md-9"></div>
-    <div id="graph-controls" class="col-md-3">
-        <a id="reload-btn" class="btn btn-primary btn-large btn-graph-control">Reload graph</a>
-        <a id="fit-btn" class="btn btn-primary btn-large btn-graph-control">Fit graph</a>
-        <a id="autolayout-btn" class="btn btn-primary btn-large btn-graph-control">Auto-layout</a>
-    </div>
+        <div id="cy" class="col-md-9"></div>
+        <div id="graph-controls" class="col-md-3">
+            <a id="reload-btn" class="btn btn-primary btn-large btn-graph-control">Reload graph</a>
+            <a id="fit-btn" class="btn btn-primary btn-large btn-graph-control">Fit graph</a>
+            <a id="auto-layout-btn" class="btn btn-primary btn-large btn-graph-control">Auto-layout</a>
+        </div>
     </div>
     <div class="row">
-    <form id="command-form" method="POST" action="{% url 'socrates.command' %}">
-        {% csrf_token %}
-        <label for="command">Command</label>
-        <input id="command" type="text" name="command" placeholder="Command..."/>
-        <input id="submit-command-btn" type="button" name="submit" value="Submit" formaction=""/>
-    </form>
+        <div id="dialog" class="col-md-9">
+            <textarea id="dialog-area" title="system-dialog" disabled="disabled"></textarea>
+        </div>
+    </div>
+    <div class="row">
+        <form id="command-form" method="POST" action="{% url 'socrates.command' %}">
+            {% csrf_token %}
+            <label for="command">Command</label>
+            <input id="command" type="text" name="command" placeholder="Command..."/>
+            <input id="submit-command-btn" type="button" name="submit" value="Submit" formaction=""/>
+        </form>
     </div>
 {% endblock %}
 

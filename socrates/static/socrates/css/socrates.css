@@ -6,7 +6,6 @@ body {
 
 #cy {
   height: 500px;
-  width: 600px;
   background-color: #336699;
 }
 
@@ -21,4 +20,14 @@ body {
 
 .btn-graph-control {
   display: block;
+  margin-bottom: 1em;
+}
+
+#main-content-inner .row {
+  margin-bottom: 1em;
+}
+
+#dialog-area {
+  width: 100%;
+  height: 10em;
 }

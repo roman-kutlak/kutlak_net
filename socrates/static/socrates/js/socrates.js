@@ -54,13 +54,8 @@ function reloadGraph(data) {
     }
   }
 
-  cy.animate({
-    fit: {
-      padding: 20
-    }
-  }, {
-    duration: 1000
-  });
+  cy.layout({name: 'cola', duration: 4000});
+
 }
 
 $('#reload-btn').on('click', function () {
@@ -71,17 +66,22 @@ $('#reload-btn').on('click', function () {
     reloadGraph(data);
   }).error(function (request, textStatus, error) {
     console.log(textStatus);
+    console.log(error);
   });
 });
 
 $('#fit-btn').on('click', function () {
   cy.animate({
     fit: {
-      padding: 20
+      padding: 30
     }
   }, {
     duration: 1000
   });
+});
+
+$('#auto-layout-btn').on('click', function () {
+    cy.layout({name: 'cola', duration: 4000});
 });
 
 $('#command-form').submit(function (event) {
@@ -152,8 +152,8 @@ document.addEventListener('DOMContentLoaded', function () { // on dom ready
     },
 
     layout: {
-      name: 'grid',
-      padding: 10
+      name: 'cola',
+      padding: 30
     }
   });
 

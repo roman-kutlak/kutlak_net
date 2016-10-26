@@ -25,8 +25,7 @@ class JSONResponseMixin(object):
 class Graph(JSONResponseMixin, TemplateView):
 
     def get_data(self, context):
-        context.update({'nodes': [],
-                        'edges': []})
+        context.update({'nodes': [], 'edges': []})
         context.pop('view')
         return context
 
