@@ -48,6 +48,20 @@ def process_command(request):
         message = 'SYSTEM: {}: {}\n'.format(reason, repr(argument))
     else:
         message = 'SYSTEM: {}\n'.format(response)
+    return response_from_dialog(d, message)
+
+
+def load_kb(request):
+    d = Dialog()
+    rules = request.POST.get('rules', '')
+    response = []
+    for row in rules.split('\n'):
+        r = row.strip()
+        response.append(d.parse('assert ' + r) if r and not r.startswith('#') else None)
+    return response_from_dialog(d, 'SYSTEM: rules loaded:\n\t' + '\n\t'.join([m for m in response if m]))
+
+
+def response_from_dialog(d, message):
     nodes = [{'id': x.name, 'name': str(x.rule)} for x in d.aaf.arguments]
     edges = [{'id': '{}_{}'.format(a.name, b.name), 'source': a.name, 'target': b.name}
              for a in d.aaf.arguments for b in a.plus]

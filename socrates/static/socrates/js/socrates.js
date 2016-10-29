@@ -9,6 +9,7 @@ var cy;
 var history = '';
 var lastData = undefined;
 
+
 function submitCommand(event) {
   event.preventDefault();
 
@@ -31,6 +32,7 @@ function submitCommand(event) {
       reloadGraph(data);
     });
 }
+
 
 function reloadGraph(data) {
   console.log(data);
@@ -73,23 +75,26 @@ function reloadGraph(data) {
   }
 
   if (data['labelling'] !== undefined) {
-    for (i = 0; i < data['labelling']['IN'].length; ++i) {
-      cy.$('node#' + data['labelling']['IN'][i]).animate({
-        style: { backgroundColor: 'green'}
+    var nodes_in = data['labelling']['IN'];
+    for (i = 0; i < nodes_in.length; ++i) {
+      cy.$('node#' + nodes_in[i]).animate({
+        style: {backgroundColor: 'green'}
       }, {
         duration: 1000
       });
     }
-    for (i = 0; i < data['labelling']['OUT'].length; ++i) {
-      cy.$('node#' + data['labelling']['OUT'][i]).animate({
-        style: { backgroundColor: 'red'}
+    var nodes_out = data['labelling']['OUT'];
+    for (i = 0; i < nodes_out.length; ++i) {
+      cy.$('node#' + nodes_out[i]).animate({
+        style: {backgroundColor: 'red'}
       }, {
         duration: 1000
       });
     }
-    for (i = 0; i < data['labelling']['UNDEC'].length; ++i) {
-      cy.$('node#' + data['labelling']['UNDEC'][i]).animate({
-        style: { backgroundColor: 'grey'}
+    var nodes_undecided = data['labelling']['UNDEC'];
+    for (i = 0; i < nodes_undecided.length; ++i) {
+      cy.$('node#' + nodes_undecided[i]).animate({
+        style: {backgroundColor: 'grey'}
       }, {
         duration: 1000
       });
@@ -98,17 +103,20 @@ function reloadGraph(data) {
 
 }
 
+
 $('#reload-btn').on('click', function () {
   $.ajax({
     'url': '/socrates/graph/',
     'context': cy
   }).done(function (data) {
     reloadGraph(data);
+    history = '';
   }).error(function (request, textStatus, error) {
     console.log(textStatus);
     console.log(error);
   });
 });
+
 
 $('#fit-btn').on('click', function () {
   cy.animate({
@@ -120,16 +128,48 @@ $('#fit-btn').on('click', function () {
   });
 });
 
+
 $('#auto-layout-btn').on('click', function () {
-    cy.layout({name: 'cola', duration: 4000});
+  cy.layout({name: 'cola', duration: 4000});
 });
+
 
 $('#command-form').submit(function (event) {
   submitCommand(event);
 });
+
+
 $('#submit-command-btn').click(function (event) {
   submitCommand(event);
 });
+
+
+$('#submit-kb').click(function () {
+
+  var $form = $('#load-kb-form');
+  var url = $form.attr('action');
+  var rules = {rules: $('#kb-text-area')[0].value};
+  console.log('sending rules: ' + rules);
+  $.post(url, rules)
+    .done(function (data){
+      reloadGraph(data);
+      $('#dialog-area').html(data['message']);
+      history = rules.rules;
+    })
+    .error(function (request, textStatus, errorThrown) {
+      console.log(textStatus);
+    })
+    .always(function() {
+      $('#load-kb-dialog').modal('hide');
+    });
+
+});
+
+
+$('#load-kb-dialog').on('shown.bs.modal', function () {
+  $('#kb-text-area').focus()
+});
+
 
 document.addEventListener('DOMContentLoaded', function () { // on dom ready
 

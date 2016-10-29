@@ -26,9 +26,10 @@
     <div class="row">
         <div id="cy" class="col-md-9"></div>
         <div id="graph-controls" class="col-md-3">
-            <a id="reload-btn" class="btn btn-primary btn-large btn-graph-control">Reload graph</a>
+            <a id="reload-btn" class="btn btn-primary btn-large btn-graph-control">Clear</a>
             <a id="fit-btn" class="btn btn-primary btn-large btn-graph-control">Fit graph</a>
             <a id="auto-layout-btn" class="btn btn-primary btn-large btn-graph-control">Auto-layout</a>
+            <a id="load-kb-btn" class="btn btn-primary btn-large btn-graph-control" data-toggle="modal" data-target="#load-kb-dialog">Load KB</a>
         </div>
     </div>
     <div class="row">
@@ -44,6 +45,32 @@
             <input id="submit-command-btn" type="button" name="submit" value="Submit" formaction=""/>
         </form>
     </div>
+
+
+    <!-- Modal -->
+    <div class="modal fade" id="load-kb-dialog">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+            <h4 class="modal-title">Modal title</h4>
+          </div>
+          <div class="modal-body">
+            <form id="load-kb-form" method="POST" action="{% url 'socrates.load-kb' %}">
+                {% csrf_token %}
+                <textarea id="kb-text-area" title="knowledge base rules"></textarea>
+            </form>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            <button id="submit-kb" type="button" class="btn btn-primary"><i class="fa fa-reload"></i> Load</button>
+          </div>
+        </div><!-- /.modal-content -->
+      </div><!-- /.modal-dialog -->
+    </div><!-- /.modal -->
+
 {% endblock %}
 
 {% block scripts %}
