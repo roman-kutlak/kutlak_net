@@ -6,7 +6,8 @@
 // https://gist.github.com/maxkfranz/621d51ea7de19608127e
 
 var cy;
-
+var history = '';
+var lastData = undefined;
 
 function submitCommand(event) {
   event.preventDefault();
@@ -14,14 +15,26 @@ function submitCommand(event) {
   var $form = $('#command-form');
   var url = $form.attr('action');
 
-  $.post(url, $form.serialize())
+  var client_data = $form.serializeArray();
+  client_data.push({name: 'history', value: history});
+
+  $.post(url, client_data)
     .done(function (data) {
+      lastData = data;
+      var cmd = $('#command').val();
+      history += cmd + '\n';
+      $('#dialog-area').append('USER: ' + cmd + '\n');
+      $('#dialog-area').append(data['message']);
+      var textarea = $('#dialog-area')[0];
+      textarea.scrollTop = textarea.scrollHeight;
+      $('#command').val('');
       reloadGraph(data);
     });
 }
 
 function reloadGraph(data) {
   console.log(data);
+  var changed = false;
   var nodes = data['nodes'];
   var edges = data['edges'];
   var processed = [];
@@ -32,6 +45,7 @@ function reloadGraph(data) {
       console.log('adding node: ' + node);
       cy.add({group: 'nodes', data: node});
       processed.push(node.id);
+      changed = true;
     } else {
       console.log('node present');
       processed.push(node.id);
@@ -54,7 +68,33 @@ function reloadGraph(data) {
     }
   }
 
-  cy.layout({name: 'cola', duration: 4000});
+  if (changed) {
+    cy.layout({name: 'cola', duration: 4000});
+  }
+
+  if (data['labelling'] !== undefined) {
+    for (i = 0; i < data['labelling']['IN'].length; ++i) {
+      cy.$('node#' + data['labelling']['IN'][i]).animate({
+        style: { backgroundColor: 'green'}
+      }, {
+        duration: 1000
+      });
+    }
+    for (i = 0; i < data['labelling']['OUT'].length; ++i) {
+      cy.$('node#' + data['labelling']['OUT'][i]).animate({
+        style: { backgroundColor: 'red'}
+      }, {
+        duration: 1000
+      });
+    }
+    for (i = 0; i < data['labelling']['UNDEC'].length; ++i) {
+      cy.$('node#' + data['labelling']['UNDEC'][i]).animate({
+        style: { backgroundColor: 'grey'}
+      }, {
+        duration: 1000
+      });
+    }
+  }
 
 }
 
@@ -133,21 +173,11 @@ document.addEventListener('DOMContentLoaded', function () { // on dom ready
 
     elements: {
       nodes: [
-        {data: {id: 'j', name: 'Jerry'}},
-        {data: {id: 'e', name: 'Elaine'}},
-        {data: {id: 'k', name: 'Kramer'}},
-        {data: {id: 'g', name: 'George'}}
+        {data: {id: 'p', name: 'p'}},
+        {data: {id: 'q', name: 'q'}},
       ],
       edges: [
-        {data: {source: 'j', target: 'e'}},
-        {data: {source: 'j', target: 'k'}},
-        {data: {source: 'j', target: 'g'}},
-        {data: {source: 'e', target: 'j'}},
-        {data: {source: 'e', target: 'k'}},
-        {data: {source: 'k', target: 'j'}},
-        {data: {source: 'k', target: 'e'}},
-        {data: {source: 'k', target: 'g'}},
-        {data: {source: 'g', target: 'j'}}
+        {data: {source: 'p', target: 'q'}},
       ]
     },
 
