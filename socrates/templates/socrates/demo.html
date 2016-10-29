@@ -40,9 +40,12 @@
     <div class="row">
         <form id="command-form" method="POST" action="{% url 'socrates.command' %}">
             {% csrf_token %}
-            <label for="command">Command</label>
-            <input id="command" type="text" name="command" placeholder="Command..."/>
-            <input id="submit-command-btn" type="button" name="submit" value="Submit" formaction=""/>
+            <div class="col-md-1">
+                <label for="command">Command</label>
+            </div>
+            <div class="col-md-8">
+                <input id="command" type="text" name="command" placeholder="Command... (e.g., help)"/>
+            </div>
         </form>
     </div>
 
