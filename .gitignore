@@ -2,3 +2,7 @@ _static/
 .idea
 db.sqlite3
 argulib
+nlglib
+__pycache__
+*.py[co]
+*~
