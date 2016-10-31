@@ -6,7 +6,7 @@
 // https://gist.github.com/maxkfranz/621d51ea7de19608127e
 
 var cy;
-var history = '';
+var dialog_history = '';
 var lastData = undefined;
 
 
@@ -17,13 +17,13 @@ function submitCommand(event) {
   var url = $form.attr('action');
 
   var client_data = $form.serializeArray();
-  client_data.push({name: 'history', value: history});
+  client_data.push({name: 'history', value: dialog_history});
 
   $.post(url, client_data)
     .done(function (data) {
       lastData = data;
       var cmd = $('#command').val();
-      history += cmd + '\n';
+      dialog_history += cmd + '\n';
       $('#dialog-area').append('USER: ' + cmd + '\n');
       $('#dialog-area').append(data['message']);
       var textarea = $('#dialog-area')[0];
@@ -110,7 +110,7 @@ $('#reload-btn').on('click', function () {
     'context': cy
   }).done(function (data) {
     reloadGraph(data);
-    history = '';
+    dialog_history = '';
   }).error(function (request, textStatus, error) {
     console.log(textStatus);
     console.log(error);
@@ -154,7 +154,7 @@ $('#submit-kb').click(function () {
     .done(function (data){
       reloadGraph(data);
       $('#dialog-area').html(data['message']);
-      history = rules.rules;
+      dialog_history = rules.rules + '\n';
     })
     .error(function (request, textStatus, errorThrown) {
       console.log(textStatus);
