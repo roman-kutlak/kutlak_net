@@ -1,0 +1,28 @@
+cffi==1.8.3
+click==6.7
+colorama==0.3.7
+cryptography==1.5.2
+Django==1.10.2
+django-nose==1.4.4
+ecdsa==0.13
+Flask==0.12.2
+idna==2.1
+isodate==0.6.0
+itsdangerous==0.24
+Jinja2==2.10
+MarkupSafe==1.0
+mysqlclient==1.3.9
+nltk==3.2.5
+nose==1.3.7
+paramiko==2.0.2
+pyasn1==0.1.9
+pycparser==2.14
+pycrypto==2.6.1
+pyparsing==2.1.10
+python-termstyle==0.1.10
+rdflib==4.2.2
+rednose==1.2.1
+six==1.11.0
+Werkzeug==0.13
+-e git+https://github.com/roman-kutlak/argulib.git@master#egg=argulib
+-e git+https://github.com/roman-kutlak/nlglib.git@a9bcc72327dd1440f72e71335037e91b5491e177#egg=nlglib

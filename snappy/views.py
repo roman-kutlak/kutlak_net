@@ -12,8 +12,8 @@ from .models import TemplateModel
 from snappy.utils import logger
 
 from nlglib import pipeline
-from nlglib import fol
-from nlglib.simplifications import simplification_ops
+# from nlglib import fol
+# from nlglib.simplifications import simplification_ops
 from nlglib import lexicalisation
 
 
@@ -60,9 +60,9 @@ def translate(request):
         else:
             response_data['text'] = "Enter a formula first. E.g., 'Happy(bob)'"
             response_data['status'] = 'default'
-    except fol.FormulaParseError as e:
-        response_data['text'] = str(e)
-        response_data['status'] = 'error'
+    # except fol.FormulaParseError as e:
+    #     response_data['text'] = str(e)
+    #     response_data['status'] = 'error'
     except Exception as e:
         logger.exception(e)
     return JsonResponse(response_data)

@@ -24,6 +24,8 @@ urlpatterns = [
     url(r'^login/$', views.do_login, name='login'),
     url(r'^logout/$', views.do_logout, name='logout'),
     url(r'^$', views.welcome, name='homepage'),
+    url(r'^email$', views.email, name='email'),
+    url(r'^public-key$', views.public_key, name='public_key'),
     url(r'^notes/', include('notes.urls')),
     url(r'^snappy/', include('snappy.urls')),
     url(r'^socrates/', include('socrates.urls')),

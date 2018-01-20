@@ -15,6 +15,14 @@ def welcome(request):
     return render(request, 'base.html')
 
 
+def email(request):
+    return render(request, 'email.html')
+
+
+def public_key(request):
+    return ''
+
+
 def do_login(request):
     if request.method == 'GET':
         return render(request, 'login.html')
