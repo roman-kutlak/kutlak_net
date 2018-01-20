@@ -11,10 +11,10 @@ from .models import TemplateModel
 
 from snappy.utils import logger
 
-from nlglib import pipeline
-# from nlglib import fol
-# from nlglib.simplifications import simplification_ops
-from nlglib import lexicalisation
+from nlglib.realisation.simplenlg.realisation import Realiser
+from nlglib.lexicalisation import Lexicaliser
+from nlglib.macroplanning import formula_to_rst, expr
+from nlglib.microplanning import *
 
 
 def homepage(request):
@@ -28,8 +28,8 @@ class Simplification:
 
 def demo(request):
     functions = []
-    for n, f in simplification_ops.items():
-        functions.append(Simplification(name=f.__name__, doc=f.__doc__, pretty=n))
+    # for n, f in simplification_ops.items():
+    #     functions.append(Simplification(name=f.__name__, doc=f.__doc__, pretty=n))
     return render(request, 'snappy/demo.html', {
         'simplifications': functions,
     })
@@ -43,6 +43,7 @@ def translate(request):
     simplifications = [x.strip() for x in
                        request.POST.get('simplifications', '').split('|')]
     try:
+        realise = Realiser(host='roman.kutlak.info')
         if formula:
             template_instances = TemplateModel.objects.all()
             templates = {}
@@ -50,11 +51,12 @@ def translate(request):
             for t in template_instances:
                 name = t.name
                 try:
-                    template = lexicalisation.string_to_template(t.content)
+                    template = eval(t.content)
                     templates[name] = template
                 except Exception as e:
                     errors.append(('danger', str(e)))  # use bootstrap terminology...
-            response_data['text'] = pipeline.translate(formula, templates, simplifications)
+            lex = Lexicaliser(templates=templates)
+            response_data['text'] = realise(lex(formula_to_rst(expr(formula))))
             response_data['status'] = 'success'
             response_data['messages'] = json.dumps(errors)
         else:

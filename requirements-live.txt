@@ -25,4 +25,4 @@ rednose==1.2.1
 six==1.11.0
 Werkzeug==0.13
 -e git+https://github.com/roman-kutlak/argulib.git@master#egg=argulib
--e git+https://github.com/roman-kutlak/nlglib.git@a9bcc72327dd1440f72e71335037e91b5491e177#egg=nlglib
+-e git+https://github.com/roman-kutlak/nlglib.git@master#egg=nlglib
