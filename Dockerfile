@@ -1,6 +1,6 @@
 FROM gliderlabs/alpine:3.6
 
-RUN apk add --no-cache python3 python3-dev uwsgi uwsgi-python3 libffi gcc git
+RUN apk add --no-cache python3 python3-dev uwsgi uwsgi-python3 git
 RUN pip3 install virtualenv
 
 WORKDIR /opt/kutlak_net
