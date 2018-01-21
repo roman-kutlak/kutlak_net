@@ -11,7 +11,6 @@ RUN virtualenv -p `which python3` /opt/virtualenv && \
 
 COPY . /opt/kutlak_net
 
-CMD if test ! -e /var/log/kutlak_net/; then mkdir -p /var/log/kutlak_net/; fi && \
-    uwsgi --ini /opt/kutlak_net/kutlak_net/uwsgi.ini
+CMD uwsgi --ini /opt/kutlak_net/kutlak_net/uwsgi.ini
 
 EXPOSE 8000
