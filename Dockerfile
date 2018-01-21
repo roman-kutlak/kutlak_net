@@ -1,45 +1,17 @@
-FROM ubuntu:16.04
+FROM gliderlabs/alpine:3.6
 
-MAINTAINER kutlak.roman@gmail.com
+RUN apk add --no-cache python3 python3-dev uwsgi uwsgi-python3 libffi gcc git
+RUN pip3 install virtualenv
 
-# Install required packages and remove the apt packages cache when done.
-
-RUN apt-get update && \
-    apt-get upgrade -y && \
-    apt-get install -y \
-	git \
-	python3 \
-	python3-dev \
-	python3-setuptools \
-	python3-pip \
-	nginx \
-	supervisor \
-	sqlite3 \
-	libmysqld-dev \
-	libffi-dev \
-	libssl-dev \
-	libxml2-dev && \
-	pip3 install -U pip setuptools && \
-   rm -rf /var/lib/apt/lists/*
-
-# install uwsgi now because it takes a little while
-RUN pip3 install uwsgi
-
-# setup all the configfiles
-RUN echo "daemon off;" >> /etc/nginx/nginx.conf
-COPY kutlak_net/nginx.conf /etc/nginx/sites-available/default
-COPY kutlak_net/supervisor-website.conf /etc/supervisor/conf.d/
-
-# COPY requirements.txt and RUN pip install BEFORE adding the rest of your code, this will cause Docker's caching mechanism
-# to prevent re-installing (all your) dependencies when you made a change a line or two in your app.
-RUN mkdir -p /opt/kutlak_net
-RUN mkdir -p /var/log/kutlak_net
-
+WORKDIR /opt/kutlak_net
 COPY requirements-live.txt /opt/kutlak_net
-RUN pip3 install -r /opt/kutlak_net/requirements-live.txt
 
-# add (the rest of) our code
+RUN virtualenv -p `which python3` /opt/virtualenv && \
+    /opt/virtualenv/bin/pip install -r /opt/kutlak_net/requirements-live.txt
+
 COPY . /opt/kutlak_net
 
-EXPOSE 80
-#CMD ["supervisord", "-n"]
+CMD if test ! -e /var/log/kutlak_net/; then mkdir -p /var/log/kutlak_net/; fi && \
+    uwsgi --ini /opt/kutlak_net/kutlak_net/uwsgi.ini
+
+EXPOSE 8000

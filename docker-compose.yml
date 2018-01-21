@@ -1,0 +1,17 @@
+version: '2'
+
+services:
+  website:
+    build: .
+    ports:
+      - "8000:8000"
+      - "9000:9000"
+#    command: uwsgi --ini /opt/kutlak_net/kutlak_net/uwsgi.ini
+  nginx:
+    build: docker/nginx/
+    ports:
+      - "80:80"
+    depends_on:
+      - website
+    links:
+      - website:website

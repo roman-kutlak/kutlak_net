@@ -1,4 +1,4 @@
-from django.core.urlresolvers import get_resolver
+from django.urls import get_resolver
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout

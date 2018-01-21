@@ -1,6 +1,5 @@
-import json
+import nltk
 
-from django.http import HttpResponse
 from django.http import JsonResponse
 from django.shortcuts import render
 
@@ -60,11 +59,11 @@ def translate(request):
             response_data['status'] = 'success'
             response_data['messages'] = json.dumps(errors)
         else:
-            response_data['text'] = "Enter a formula first. E.g., 'Happy(bob)'"
+            response_data['text'] = "Enter a formula first. E.g., 'happy(roman)'"
             response_data['status'] = 'default'
-    # except fol.FormulaParseError as e:
-    #     response_data['text'] = str(e)
-    #     response_data['status'] = 'error'
+    except nltk.sem.logic.LogicalExpressionException as e:
+            response_data['text'] = str(e)
+            response_data['status'] = 'error'
     except Exception as e:
         logger.exception(e)
     return JsonResponse(response_data)
